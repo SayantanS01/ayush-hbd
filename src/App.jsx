@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
-import { AdminProvider } from './context/AdminContext'
+import { AdminProvider, useAdmin } from './context/AdminContext'
 import Navbar from './components/layout/Navbar'
 import PageLoader from './components/ui/PageLoader'
 import MusicPlayer from './components/ui/MusicPlayer'
@@ -16,6 +16,9 @@ const Admin = lazy(() => import('./pages/Admin'))
 
 const AnimatedRoutes = () => {
   const location = useLocation()
+  const { loading } = useAdmin()
+
+  if (loading) return <PageLoader />
   
   return (
     <AnimatePresence mode="wait">

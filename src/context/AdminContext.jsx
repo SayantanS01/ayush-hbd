@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../utils/supabase';
 
 const AdminContext = createContext();
 
@@ -10,17 +11,13 @@ const DEFAULT_CONTENT = {
   themeColor: "#3BA9F5",
   enableAnimations: true,
   musicUrl: "",
-  // Home Page
   heroSubtitle: "IT'S A BIRD! IT'S A PLANE!",
   heroTitle: "HAPPY BIRTHDAY",
   mainMessage: "Hope your day is as super as you are!",
-  // Gallery Page
   galleryTitle: "SUPER GALLERY",
   gallerySubtitle: "Capturing every magical moment!",
-  // Games Page
   gamesTitle: "FUN & GAMES!",
   gamesSubtitle: "Choose a mission, little hero!",
-  // Wishes Page
   wishesTitle: "MAGICAL WISHES",
   wishesLongText: "Dear Ayush, you are our shining star! Every day with you is an adventure. We love you to the moon and back!",
   wishes: [
@@ -28,11 +25,9 @@ const DEFAULT_CONTENT = {
     "Grow big and strong like a friendly monster!",
     "May your day be filled with cake and joy!"
   ],
-  // Surprise Page
   surprisePreText: "ARE YOU READY FOR A SURPRISE?",
   surpriseButtonText: "PRESS ME IF YOU DARE!",
   surpriseFinalTitle: "SURPRISE!",
-  // Media
   images: Array(20).fill(null).map((_, i) => ({
     id: i,
     url: `https://picsum.photos/seed/${i + 100}/800/800`,
@@ -41,21 +36,50 @@ const DEFAULT_CONTENT = {
 };
 
 export const AdminProvider = ({ children }) => {
-  const [content, setContent] = useState(() => {
-    const saved = localStorage.getItem('ayush_hbd_content');
-    return saved ? JSON.parse(saved) : DEFAULT_CONTENT;
-  });
+  const [content, setContent] = useState(DEFAULT_CONTENT);
+  const [isAdmin, setIsAdmin] = useState(() => sessionStorage.getItem('is_admin') === 'true');
+  const [loading, setLoading] = useState(true);
 
-  const [isAdmin, setIsAdmin] = useState(() => {
-    return sessionStorage.getItem('is_admin') === 'true';
-  });
-
+  // Load content
   useEffect(() => {
-    localStorage.setItem('ayush_hbd_content', JSON.stringify(content));
-  }, [content]);
+    const loadData = async () => {
+      setLoading(true);
+      if (supabase) {
+        const { data, error } = await supabase
+          .from('birthday_content')
+          .select('content')
+          .eq('id', 1)
+          .single();
+        
+        if (data) {
+          setContent(data.content);
+        } else if (error && error.code === 'PGRST116') {
+          // Row doesn't exist, create it with defaults
+          await supabase.from('birthday_content').insert([{ id: 1, content: DEFAULT_CONTENT }]);
+        }
+      } else {
+        const saved = localStorage.getItem('ayush_hbd_content');
+        if (saved) setContent(JSON.parse(saved));
+      }
+      setLoading(false);
+    };
 
-  const updateContent = (newContent) => {
-    setContent(prev => ({ ...prev, ...newContent }));
+    loadData();
+  }, []);
+
+  // Save content
+  const updateContent = async (newContent) => {
+    const updated = { ...content, ...newContent };
+    setContent(updated);
+    
+    if (supabase) {
+      await supabase
+        .from('birthday_content')
+        .update({ content: updated })
+        .eq('id', 1);
+    } else {
+      localStorage.setItem('ayush_hbd_content', JSON.stringify(updated));
+    }
   };
 
   const login = (password) => {
@@ -73,7 +97,7 @@ export const AdminProvider = ({ children }) => {
   };
 
   return (
-    <AdminContext.Provider value={{ content, updateContent, isAdmin, login, logout }}>
+    <AdminContext.Provider value={{ content, updateContent, isAdmin, login, logout, loading }}>
       {children}
     </AdminContext.Provider>
   );

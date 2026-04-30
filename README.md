@@ -1,16 +1,37 @@
-# React + Vite
+# Ayush's Birthday Adventure 🎉
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A magical, animated, multi-page birthday website built with React, GSAP, and Framer Motion.
 
-Currently, two official plugins are available:
+## 🚀 Features
+- **Superhero Theme**: Vibrant cartoon animations and comic-style UI.
+- **Fun & Games**: Interactive mini-games (Balloon Pop, Memory Match, Hero Jump).
+- **Super Gallery**: Masonry grid with lightbox for 20 photos.
+- **Admin Panel**: Fully functional dashboard to manage all content.
+- **Surprise Reveal**: Cinematic monster vs superhero battle sequence.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ⚙️ Backend Setup (Supabase)
 
-## React Compiler
+To make your Admin Panel changes visible to everyone, follow these steps:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Create a Supabase Project**: Go to [supabase.com](https://supabase.com) and create a free project.
+2. **Create a Table**:
+   - Name: `birthday_content`
+   - Columns:
+     - `id`: int8 (Primary Key, set to 1)
+     - `content`: jsonb (This will store all your site data)
+3. **Enable RLS (Optional)**: For simplicity in a birthday site, you can disable RLS or add a policy that allows everyone to select and authenticated users to update.
+4. **Add Environment Variables to Vercel**:
+   - `VITE_SUPABASE_URL`: Your Supabase Project URL.
+   - `VITE_SUPABASE_ANON_KEY`: Your Supabase Anon Key.
 
-## Expanding the ESLint configuration
+## 🛠️ Local Development
+1. Clone the repo.
+2. Run `npm install`.
+3. Run `npm run dev`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📦 Deployment
+The site is ready for Vercel! Just push to GitHub and connect the repo. Don't forget to add the environment variables mentioned above.
+
+## 🔐 Admin Access
+- **URL**: `/admin`
+- **Password**: `ayush2026`
