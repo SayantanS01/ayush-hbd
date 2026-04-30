@@ -18,12 +18,12 @@ const DEFAULT_CONTENT = {
   gallerySubtitle: "Capturing every magical moment!",
   gamesTitle: "FUN & GAMES!",
   gamesSubtitle: "Choose a mission, little hero!",
-  wishesTitle: "MAGICAL WISHES",
-  wishesLongText: "Dear Ayush, you are our shining star! Every day with you is an adventure. We love you to the moon and back!",
+  wishesTitle: "MAGICAL BIRTHDAY WISHES ✨🎉",
+  wishesLongText: "Dear Ayush, you are our brightest little star ⭐\nEvery day with you is a new adventure full of smiles, laughter, and magic.\n\nToday is YOUR special day, and the whole world is celebrating YOU! 🎉\nMay your life be filled with superpowers, giant dreams, and endless happiness.\n\nWe love you to the moon, the stars, and beyond! 🚀💖",
   wishes: [
-    "You're our little superhero!",
-    "Grow big and strong like a friendly monster!",
-    "May your day be filled with cake and joy!"
+    "YOU’RE OUR LITTLE SUPERHERO! 🕷️💥",
+    "GROW BIG, STRONG & AWESOME LIKE A FRIENDLY MONSTER! 🦖🔥",
+    "MAY YOUR DAY BE FULL OF CAKE, FUN & LOTS OF SURPRISES! 🎁🎈"
   ],
   surprisePreText: "HEY AYUSH... ARE YOU READY FOR AN EPIC SURPRISE? 🌌",
   surpriseButtonText: "CLICK ME... IF YOU'RE BRAVE ENOUGH! 😈 🔥",
