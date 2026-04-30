@@ -31,7 +31,6 @@ const DEFAULT_CONTENT = {
   images: Array(20).fill(null).map((_, i) => ({
     id: i,
     url: `https://picsum.photos/seed/${i + 100}/800/800`,
-    page: i < 10 ? 'gallery' : i < 15 ? 'home' : 'wishes'
   })),
 };
 

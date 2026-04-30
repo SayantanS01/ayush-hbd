@@ -7,7 +7,7 @@ const Gallery = () => {
   const { content } = useAdmin();
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const galleryImages = content.images.filter(img => img.page === 'gallery');
+  const galleryImages = content.images;
 
   return (
     <div className="pt-24 pb-32 px-6 min-h-screen">
