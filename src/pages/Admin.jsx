@@ -321,22 +321,53 @@ const Admin = () => {
                   </section>
 
                   <section>
-                    <label className="block font-comic mb-2">Background Music (Direct MP3 URL)</label>
-                    <div className="flex gap-4">
-                      <div className="flex-grow">
+                    <label className="block font-comic mb-2">Background Music</label>
+                    <div className="space-y-4">
+                      {/* File Upload Option */}
+                      <div className="p-4 bg-gray-100 rounded-xl border-2 border-dashed border-black">
+                        <label className="block font-comic text-sm mb-2">Upload MP3 File (Max 5MB)</label>
                         <input 
-                          type="text" 
-                          value={content.musicUrl}
-                          onChange={(e) => updateContent({ musicUrl: e.target.value })}
-                          className="w-full comic-input"
-                          placeholder="https://example.com/audio.mp3"
+                          type="file" 
+                          accept="audio/*"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              if (file.size > 5 * 1024 * 1024) {
+                                alert("File too big! Keep it under 5MB for local storage magic.");
+                                return;
+                              }
+                              const reader = new FileReader();
+                              reader.onload = (event) => {
+                                updateContent({ musicUrl: event.target.result });
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                          className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cartoon-blue file:text-white hover:file:bg-cartoon-blue/80"
                         />
                       </div>
-                      <div className={`p-3 rounded-xl border-2 border-black ${content.musicUrl ? 'bg-cartoon-green' : 'bg-gray-200'}`}>
-                        <Music className="text-white" />
+
+                      <div className="text-center font-comic text-gray-400">-- OR --</div>
+
+                      {/* URL Option */}
+                      <div className="flex gap-4">
+                        <div className="flex-grow">
+                          <input 
+                            type="text" 
+                            value={content.musicUrl.startsWith('data:') ? 'Local File Uploaded' : content.musicUrl}
+                            onChange={(e) => updateContent({ musicUrl: e.target.value })}
+                            className="w-full comic-input"
+                            placeholder="https://example.com/audio.mp3"
+                          />
+                        </div>
+                        <div className={`p-3 rounded-xl border-2 border-black ${content.musicUrl ? 'bg-cartoon-green' : 'bg-gray-200'}`}>
+                          <Music className="text-white" />
+                        </div>
                       </div>
                     </div>
-                    <p className="mt-2 text-sm text-gray-500 italic">Example: Use a direct link from Dropbox, Cloudinary, or your own server.</p>
+                    <p className="mt-2 text-sm text-gray-500 italic">
+                      Tip: For Google Drive, use a direct link converter or upload the file directly above.
+                    </p>
                   </section>
 
                   <section className="flex items-center gap-4 bg-cartoon-yellow/10 p-6 rounded-2xl border-[3px] border-cartoon-yellow border-dashed">
