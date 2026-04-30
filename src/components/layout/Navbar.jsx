@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Image, Gamepad2, Heart, Gift, Settings } from 'lucide-react';
+import { Home, Image, Gamepad2, Heart, Gift } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -32,8 +32,6 @@ const Navbar = () => {
       <NavLink to="/games" icon={Gamepad2} label="Games" active={location.pathname === '/games'} />
       <NavLink to="/wishes" icon={Heart} label="Wishes" active={location.pathname === '/wishes'} />
       <NavLink to="/surprise" icon={Gift} label="Surprise" active={location.pathname === '/surprise'} />
-      <div className="w-[2px] h-8 bg-black/10 mx-2" />
-      <NavLink to="/admin" icon={Settings} label="Admin" active={location.pathname === '/admin'} />
     </nav>
   );
 };

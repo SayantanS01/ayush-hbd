@@ -11,9 +11,9 @@ const DEFAULT_CONTENT = {
   themeColor: "#3BA9F5",
   enableAnimations: true,
   musicUrl: "/bg-music.mp3",
-  heroSubtitle: "IT'S A BIRD! IT'S A PLANE!",
-  heroTitle: "HAPPY BIRTHDAY",
-  mainMessage: "Hope your day is as super as you are!",
+  heroSubtitle: "WAIT... IS THAT A HERO IN THE SKY?! 🕷️ ⚡️",
+  heroTitle: "HAPPY BIRTHDAY SUPERSTAR AYUSH! 🎉 🦸‍♂️",
+  mainMessage: "Today is not just your birthday... It's your SUPER DAY! 💥 Get ready for fun, games, surprises, and an epic adventure made just for you! 🎁 🕷️ 🦖",
   galleryTitle: "SUPER GALLERY",
   gallerySubtitle: "Capturing every magical moment!",
   gamesTitle: "FUN & GAMES!",
@@ -25,9 +25,9 @@ const DEFAULT_CONTENT = {
     "Grow big and strong like a friendly monster!",
     "May your day be filled with cake and joy!"
   ],
-  surprisePreText: "ARE YOU READY FOR A SURPRISE?",
-  surpriseButtonText: "PRESS ME IF YOU DARE!",
-  surpriseFinalTitle: "SURPRISE!",
+  surprisePreText: "HEY AYUSH... ARE YOU READY FOR AN EPIC SURPRISE? 🌌",
+  surpriseButtonText: "CLICK ME... IF YOU'RE BRAVE ENOUGH! 😈 🔥",
+  surpriseFinalTitle: "BOOOOM!!! 🎉 🦖 SUPER SURPRISE UNLOCKED!",
   images: Array(43).fill(null).map((_, i) => ({
     id: i,
     url: `/memory_${i + 1}.jpeg`,
@@ -36,7 +36,6 @@ const DEFAULT_CONTENT = {
 
 export const AdminProvider = ({ children }) => {
   const [content, setContent] = useState(DEFAULT_CONTENT);
-  const [isAdmin, setIsAdmin] = useState(() => sessionStorage.getItem('is_admin') === 'true');
   const [loading, setLoading] = useState(true);
 
   // Load content
@@ -71,47 +70,8 @@ export const AdminProvider = ({ children }) => {
     loadData();
   }, []);
 
-  // Save content
-  const updateContent = async (newContent) => {
-    try {
-      const updated = { ...content, ...newContent };
-      setContent(updated);
-      
-      if (supabase) {
-        const { error } = await supabase
-          .from('birthday_content')
-          .update({ content: updated })
-          .eq('id', 1);
-        if (error) throw error;
-      } else {
-        localStorage.setItem('ayush_hbd_content', JSON.stringify(updated));
-      }
-    } catch (err) {
-      console.error("Save failed:", err);
-      if (err.name === 'QuotaExceededError' || err.code === 22) {
-        alert("⚠️ STORAGE FULL! Your music/photo is too large to save in the browser. Please use Supabase or upload a smaller file.");
-      } else {
-        alert("⚠️ SAVE FAILED! Please check your connection or Supabase settings.");
-      }
-    }
-  };
-
-  const login = (password) => {
-    if (password === 'ayush2026') { // Demo password
-      setIsAdmin(true);
-      sessionStorage.setItem('is_admin', 'true');
-      return true;
-    }
-    return false;
-  };
-
-  const logout = () => {
-    setIsAdmin(false);
-    sessionStorage.removeItem('is_admin');
-  };
-
   return (
-    <AdminContext.Provider value={{ content, updateContent, isAdmin, login, logout, loading }}>
+    <AdminContext.Provider value={{ content, loading }}>
       {children}
     </AdminContext.Provider>
   );

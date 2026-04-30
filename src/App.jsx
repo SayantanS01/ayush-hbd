@@ -12,7 +12,6 @@ const Gallery = lazy(() => import('./pages/Gallery'))
 const Games = lazy(() => import('./pages/Games'))
 const Wishes = lazy(() => import('./pages/Wishes'))
 const Surprise = lazy(() => import('./pages/Surprise'))
-const Admin = lazy(() => import('./pages/Admin'))
 
 const AnimatedRoutes = () => {
   const location = useLocation()
@@ -34,7 +33,6 @@ const AnimatedRoutes = () => {
         <Route path="/games" element={<Games />} />
         <Route path="/wishes" element={<Wishes />} />
         <Route path="/surprise" element={<Surprise />} />
-        <Route path="/admin" element={<Admin />} />
       </Routes>
     </AnimatePresence>
   )
