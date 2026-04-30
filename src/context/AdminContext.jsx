@@ -68,16 +68,26 @@ export const AdminProvider = ({ children }) => {
 
   // Save content
   const updateContent = async (newContent) => {
-    const updated = { ...content, ...newContent };
-    setContent(updated);
-    
-    if (supabase) {
-      await supabase
-        .from('birthday_content')
-        .update({ content: updated })
-        .eq('id', 1);
-    } else {
-      localStorage.setItem('ayush_hbd_content', JSON.stringify(updated));
+    try {
+      const updated = { ...content, ...newContent };
+      setContent(updated);
+      
+      if (supabase) {
+        const { error } = await supabase
+          .from('birthday_content')
+          .update({ content: updated })
+          .eq('id', 1);
+        if (error) throw error;
+      } else {
+        localStorage.setItem('ayush_hbd_content', JSON.stringify(updated));
+      }
+    } catch (err) {
+      console.error("Save failed:", err);
+      if (err.name === 'QuotaExceededError' || err.code === 22) {
+        alert("⚠️ STORAGE FULL! Your music/photo is too large to save in the browser. Please use Supabase or upload a smaller file.");
+      } else {
+        alert("⚠️ SAVE FAILED! Please check your connection or Supabase settings.");
+      }
     }
   };
 
