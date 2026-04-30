@@ -388,8 +388,30 @@ const Admin = () => {
                                 return;
                               }
                               const reader = new FileReader();
-                              reader.onload = (event) => {
+                              reader.onload = async (event) => {
+                                // Update local state for immediate preview
                                 updateContent({ musicUrl: event.target.result });
+
+                                // If Supabase is connected, upload to storage
+                                if (supabase) {
+                                  try {
+                                    const fileName = `music-${Date.now()}-${file.name}`;
+                                    const { data, error } = await supabase.storage
+                                      .from('photos') // Reusing photos bucket for simplicity, or user can create 'music'
+                                      .upload(fileName, file);
+                                    
+                                    if (error) throw error;
+
+                                    const { data: { publicUrl } } = supabase.storage
+                                      .from('photos')
+                                      .getPublicUrl(data.path);
+
+                                    updateContent({ musicUrl: publicUrl });
+                                  } catch (err) {
+                                    console.error("Music upload failed:", err);
+                                    alert("Cloud music upload failed. It might still work on this device via local storage.");
+                                  }
+                                }
                               };
                               reader.readAsDataURL(file);
                             }
