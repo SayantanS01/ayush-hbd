@@ -168,11 +168,62 @@ const Admin = () => {
                         <img src={img.url} className="w-full aspect-square object-cover rounded-xl border-2 border-black" />
                         <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-2 rounded-xl text-white">
                           <p className="text-[10px] mb-1">Image #{idx + 1}</p>
+                          
+                          {/* File Upload Button */}
+                          <label className="w-full mb-2">
+                            <div className="btn-cartoon bg-cartoon-blue text-[8px] py-1 px-2 cursor-pointer text-center">
+                              UPLOAD FILE
+                            </div>
+                            <input 
+                              type="file" 
+                              accept="image/*"
+                              className="hidden"
+                              onChange={async (e) => {
+                                const file = e.target.files[0];
+                                if (!file) return;
+
+                                // Show local preview immediately
+                                const reader = new FileReader();
+                                reader.onload = (event) => {
+                                  const newImages = [...content.images];
+                                  newImages[idx].url = event.target.result;
+                                  updateContent({ images: newImages });
+                                };
+                                reader.readAsDataURL(file);
+
+                                // If Supabase is connected, upload to storage
+                                if (supabase) {
+                                  try {
+                                    const fileName = `photo-${Date.now()}-${file.name}`;
+                                    const { data, error } = await supabase.storage
+                                      .from('photos')
+                                      .upload(fileName, file);
+                                    
+                                    if (error) throw error;
+
+                                    const { data: { publicUrl } } = supabase.storage
+                                      .from('photos')
+                                      .getPublicUrl(data.path);
+
+                                    const newImages = [...content.images];
+                                    newImages[idx].url = publicUrl;
+                                    updateContent({ images: newImages });
+                                  } catch (err) {
+                                    console.error("Supabase upload failed:", err);
+                                    alert("Cloud upload failed. Using local preview only.");
+                                  }
+                                }
+                              }}
+                            />
+                          </label>
+
+                          <div className="w-full text-center text-[8px] mb-1">-- OR --</div>
+
                           <input 
                             type="text" 
-                            placeholder="URL..." 
-                            className="w-full text-[10px] p-1 rounded mb-2 text-black"
-                            value={img.url}
+                            placeholder="Paste URL..." 
+                            className="w-full text-[8px] p-1 rounded mb-2 text-black"
+                            value={img.url.startsWith('data:') ? 'Local File' : img.url}
                             onChange={(e) => {
                               const newImages = [...content.images];
                               newImages[idx].url = e.target.value;

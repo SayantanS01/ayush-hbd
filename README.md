@@ -14,11 +14,9 @@ A magical, animated, multi-page birthday website built with React, GSAP, and Fra
 To make your Admin Panel changes visible to everyone, follow these steps:
 
 1. **Create a Supabase Project**: Go to [supabase.com](https://supabase.com) and create a free project.
-2. **Create a Table**:
-   - Name: `birthday_content`
-   - Columns:
-     - `id`: int8 (Primary Key, set to 1)
-     - `content`: jsonb (This will store all your site data)
+2. **Set up Database & Storage**:
+   - **Database**: Create a table named `birthday_content` with `id` (int8, Primary Key 1) and `content` (jsonb).
+   - **Storage**: Create a public bucket named `photos` (this is where your uploaded images will be stored).
 3. **Enable RLS (Optional)**: For simplicity in a birthday site, you can disable RLS or add a policy that allows everyone to select and authenticated users to update.
 4. **Add Environment Variables to Vercel**:
    - `VITE_SUPABASE_URL`: Your Supabase Project URL.
