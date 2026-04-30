@@ -51,7 +51,12 @@ export const AdminProvider = ({ children }) => {
           .single();
         
         if (data) {
-          setContent(data.content);
+          let updatedContent = data.content;
+          // Migration: if musicUrl is the old long name, update it to the new one
+          if (updatedContent.musicUrl && updatedContent.musicUrl.includes('Sunflower')) {
+            updatedContent.musicUrl = '/bg-music.mp3';
+          }
+          setContent(updatedContent);
         } else if (error && error.code === 'PGRST116') {
           // Row doesn't exist, create it with defaults
           await supabase.from('birthday_content').insert([{ id: 1, content: DEFAULT_CONTENT }]);
