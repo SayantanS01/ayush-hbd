@@ -11,6 +11,7 @@ const MusicPlayer = () => {
   useEffect(() => {
     if (content.musicUrl && audioRef.current) {
       audioRef.current.src = content.musicUrl;
+      audioRef.current.crossOrigin = "anonymous";
       audioRef.current.load();
     }
   }, [content.musicUrl]);
