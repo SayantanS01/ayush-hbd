@@ -162,10 +162,10 @@ const Admin = () => {
                   </div>
 
                   <h4 className="text-xl font-comic">Manage 20 Images</h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
+                  <div className="columns-2 sm:columns-3 lg:columns-5 gap-4 space-y-4">
                     {content.images.map((img, idx) => (
-                      <div key={img.id} className="relative group border-2 border-black rounded-xl overflow-hidden bg-gray-200">
-                        <img src={img.url} className="w-full h-auto object-contain min-h-[100px]" />
+                      <div key={img.id} className="relative group border-2 border-black rounded-xl overflow-hidden bg-white break-inside-avoid">
+                        <img src={img.url} className="w-full h-auto block" />
                         <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-2 text-white">
                           <p className="text-[10px] mb-1">Image #{idx + 1}</p>
                           
