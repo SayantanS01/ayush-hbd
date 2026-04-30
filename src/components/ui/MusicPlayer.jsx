@@ -15,11 +15,25 @@ const MusicPlayer = () => {
     }
   }, [content.musicUrl]);
 
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      if (!isPlaying && audioRef.current) {
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(err => console.log("Autoplay still blocked:", err));
+      }
+      document.removeEventListener('click', handleFirstInteraction);
+    };
+
+    document.addEventListener('click', handleFirstInteraction);
+    return () => document.removeEventListener('click', handleFirstInteraction);
+  }, [isPlaying]);
+
   const togglePlay = () => {
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play().catch(err => console.log("Autoplay blocked:", err));
+      audioRef.current.play().catch(err => console.log("Manual play blocked:", err));
     }
     setIsPlaying(!isPlaying);
   };
