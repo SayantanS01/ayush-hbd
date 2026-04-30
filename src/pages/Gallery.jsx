@@ -34,14 +34,14 @@ const Gallery = () => {
               className="group relative cursor-zoom-in"
               onClick={() => setSelectedImage(image)}
             >
-              <div className="card-cartoon p-2 overflow-hidden">
+              <div className="card-cartoon p-2">
                 <motion.img
                   src={image.url}
                   alt={`Memory ${index + 1}`}
-                  className="w-full h-auto rounded-2xl transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-auto rounded-2xl"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl m-2">
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl">
                   <ZoomIn className="text-white w-12 h-12" />
                 </div>
               </div>
