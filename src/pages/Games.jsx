@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import BalloonPop from '../components/games/BalloonPop';
 import MemoryMatch from '../components/games/MemoryMatch';
 import HeroJump from '../components/games/HeroJump';
+import { useAdmin } from '../context/AdminContext';
 
 const Games = () => {
+  const { content } = useAdmin();
   const [activeGame, setActiveGame] = useState(null);
 
   const games = [
