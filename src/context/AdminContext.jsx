@@ -10,7 +10,7 @@ const DEFAULT_CONTENT = {
   birthdayDate: "May 1",
   themeColor: "#3BA9F5",
   enableAnimations: true,
-  musicUrl: "/Post Malone, Swae Lee - Sunflower (Spider-Man_ Into the Spider-Verse).mp3",
+  musicUrl: "/bg-music.mp3",
   heroSubtitle: "IT'S A BIRD! IT'S A PLANE!",
   heroTitle: "HAPPY BIRTHDAY",
   mainMessage: "Hope your day is as super as you are!",
@@ -28,9 +28,9 @@ const DEFAULT_CONTENT = {
   surprisePreText: "ARE YOU READY FOR A SURPRISE?",
   surpriseButtonText: "PRESS ME IF YOU DARE!",
   surpriseFinalTitle: "SURPRISE!",
-  images: Array(20).fill(null).map((_, i) => ({
+  images: Array(43).fill(null).map((_, i) => ({
     id: i,
-    url: `https://picsum.photos/seed/${i + 100}/800/800`,
+    url: `/memory_${i + 1}.jpeg`,
   })),
 };
 
