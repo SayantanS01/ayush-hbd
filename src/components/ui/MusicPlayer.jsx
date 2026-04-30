@@ -16,10 +16,25 @@ const MusicPlayer = () => {
   }, [content.musicUrl]);
 
   useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+
+    audio.addEventListener('play', onPlay);
+    audio.addEventListener('pause', onPause);
+
+    return () => {
+      audio.removeEventListener('play', onPlay);
+      audio.removeEventListener('pause', onPause);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleFirstInteraction = () => {
-      if (!isPlaying && audioRef.current) {
+      if (audioRef.current && audioRef.current.paused) {
         audioRef.current.play()
-          .then(() => setIsPlaying(true))
           .catch(err => console.log("Autoplay still blocked:", err));
       }
       document.removeEventListener('click', handleFirstInteraction);
@@ -27,15 +42,16 @@ const MusicPlayer = () => {
 
     document.addEventListener('click', handleFirstInteraction);
     return () => document.removeEventListener('click', handleFirstInteraction);
-  }, [isPlaying]);
+  }, []);
 
   const togglePlay = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
+    if (!audioRef.current) return;
+    
+    if (audioRef.current.paused) {
       audioRef.current.play().catch(err => console.log("Manual play blocked:", err));
+    } else {
+      audioRef.current.pause();
     }
-    setIsPlaying(!isPlaying);
   };
 
   return (
