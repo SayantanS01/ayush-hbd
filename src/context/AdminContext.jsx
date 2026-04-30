@@ -10,7 +10,7 @@ const DEFAULT_CONTENT = {
   birthdayDate: "May 1",
   themeColor: "#3BA9F5",
   enableAnimations: true,
-  musicUrl: "",
+  musicUrl: "https://drive.google.com/uc?export=download&id=1n5e4LFcwrBFrFwHW2uVLO3exkKLPyXII",
   heroSubtitle: "IT'S A BIRD! IT'S A PLANE!",
   heroTitle: "HAPPY BIRTHDAY",
   mainMessage: "Hope your day is as super as you are!",
