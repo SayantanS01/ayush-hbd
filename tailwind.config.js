@@ -20,7 +20,7 @@ export default {
           dark: '#B8860B',
         },
         cartoon: {
-          blue: '#3BA9F5',
+          blue: 'var(--primary-color)',
           yellow: '#F5D300',
           red: '#EF4444',
           green: '#22C55E',

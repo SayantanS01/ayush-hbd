@@ -16,7 +16,13 @@ const Admin = lazy(() => import('./pages/Admin'))
 
 const AnimatedRoutes = () => {
   const location = useLocation()
-  const { loading } = useAdmin()
+  const { content, loading } = useAdmin()
+
+  React.useEffect(() => {
+    if (content.themeColor) {
+      document.documentElement.style.setProperty('--primary-color', content.themeColor);
+    }
+  }, [content.themeColor]);
 
   if (loading) return <PageLoader />
   
