@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const HeroJump = () => {
   const [gameState, setGameState] = useState('START'); // START, PLAYING, OVER
