@@ -45,7 +45,7 @@ const HeroJump = () => {
       setDisplayY(p.posY);
       
       // Spawn obstacles
-      if (Math.random() < 0.03) {
+      if (Math.random() < 0.015) {
         setObstacles(obs => {
           // Prevent too many obstacles
           if (obs.length > 0 && obs[obs.length - 1].x > 70) return obs;
@@ -55,11 +55,11 @@ const HeroJump = () => {
 
       // Move obstacles and Collision Detection
       setObstacles(obs => {
-        const nextObs = obs.map(o => ({ ...o, x: o.x - 2.5 })).filter(o => o.x > -10);
+        const nextObs = obs.map(o => ({ ...o, x: o.x - 1.2 })).filter(o => o.x > -10);
         
         // Collision detection: hero is at x=10%
         nextObs.forEach(o => {
-          if (o.x > 8 && o.x < 18 && p.posY > -40) {
+          if (o.x > 9 && o.x < 17 && p.posY > -35) {
             setGameState('OVER');
           }
         });
