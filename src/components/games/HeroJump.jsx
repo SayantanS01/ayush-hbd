@@ -13,8 +13,8 @@ const HeroJump = () => {
     score: 0
   });
 
-  const GRAVITY = 0.8;
-  const JUMP_STRENGTH = -18;
+  const GRAVITY = 1.2;
+  const JUMP_STRENGTH = -22;
   const GROUND_LEVEL = 0;
 
   const startGame = () => {
@@ -55,7 +55,7 @@ const HeroJump = () => {
 
       // Move obstacles and Collision Detection
       setObstacles(obs => {
-        const nextObs = obs.map(o => ({ ...o, x: o.x - 2 })).filter(o => o.x > -10);
+        const nextObs = obs.map(o => ({ ...o, x: o.x - 2.5 })).filter(o => o.x > -10);
         
         // Collision detection: hero is at x=10%
         nextObs.forEach(o => {
