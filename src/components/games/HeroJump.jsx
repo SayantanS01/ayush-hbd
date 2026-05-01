@@ -4,35 +4,62 @@ import { motion } from 'framer-motion';
 const HeroJump = () => {
   const [gameState, setGameState] = useState('START'); // START, PLAYING, OVER
   const [score, setScore] = useState(0);
-  const [isJumping, setIsJumping] = useState(false);
+  const [displayY, setDisplayY] = useState(0);
   const [obstacles, setObstacles] = useState([]);
-  const gameRef = useRef(null);
-  const heroRef = useRef(null);
+  
+  const physicsRef = useRef({
+    posY: 0,
+    velocity: 0,
+    score: 0
+  });
+
+  const GRAVITY = 0.8;
+  const JUMP_STRENGTH = -18;
+  const GROUND_LEVEL = 0;
 
   const startGame = () => {
     setGameState('PLAYING');
     setScore(0);
     setObstacles([]);
+    physicsRef.current = { posY: 0, velocity: 0, score: 0 };
+    setDisplayY(0);
   };
 
   useEffect(() => {
     if (gameState !== 'PLAYING') return;
 
     const gameLoop = setInterval(() => {
-      setScore(s => s + 1);
+      const p = physicsRef.current;
       
-      // Spawn obstacles
-      if (Math.random() < 0.02) {
-        setObstacles(obs => [...obs, { id: Date.now(), x: 100 }]);
+      // Update Physics
+      p.velocity += GRAVITY;
+      p.posY += p.velocity;
+      
+      if (p.posY >= GROUND_LEVEL) {
+        p.posY = GROUND_LEVEL;
+        p.velocity = 0;
       }
 
-      // Move obstacles
+      p.score += 1;
+      setScore(Math.floor(p.score / 5)); // Slow down score display
+      setDisplayY(p.posY);
+      
+      // Spawn obstacles
+      if (Math.random() < 0.03) {
+        setObstacles(obs => {
+          // Prevent too many obstacles
+          if (obs.length > 0 && obs[obs.length - 1].x > 70) return obs;
+          return [...obs, { id: Date.now(), x: 100 }];
+        });
+      }
+
+      // Move obstacles and Collision Detection
       setObstacles(obs => {
         const nextObs = obs.map(o => ({ ...o, x: o.x - 2 })).filter(o => o.x > -10);
         
-        // Collision detection
+        // Collision detection: hero is at x=10%
         nextObs.forEach(o => {
-          if (o.x > 10 && o.x < 25 && !isJumping) {
+          if (o.x > 8 && o.x < 18 && p.posY > -40) {
             setGameState('OVER');
           }
         });
@@ -42,21 +69,22 @@ const HeroJump = () => {
     }, 20);
 
     return () => clearInterval(gameLoop);
-  }, [gameState, isJumping]);
+  }, [gameState]);
 
   const handleJump = () => {
-    if (gameState === 'START') startGame();
-    if (gameState === 'OVER') startGame();
-    if (gameState === 'PLAYING' && !isJumping) {
-      setIsJumping(true);
-      setTimeout(() => setIsJumping(false), 600);
+    if (gameState === 'START' || gameState === 'OVER') {
+      startGame();
+      return;
+    }
+    if (gameState === 'PLAYING' && physicsRef.current.posY === GROUND_LEVEL) {
+      physicsRef.current.velocity = JUMP_STRENGTH;
     }
   };
 
   return (
     <div 
       className="card-cartoon h-[400px] relative overflow-hidden bg-gradient-to-b from-sky-300 to-sky-100 cursor-pointer select-none"
-      onClick={handleJump}
+      onPointerDown={handleJump}
     >
       <div className="absolute top-4 left-4 font-comic text-2xl z-10">SCORE: {score}</div>
       
@@ -65,9 +93,9 @@ const HeroJump = () => {
 
       {/* Hero */}
       <motion.div
-        animate={{ y: isJumping ? -150 : 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="absolute bottom-10 left-[10%] text-6xl"
+        animate={{ y: displayY }}
+        transition={{ type: "tween", ease: "linear", duration: 0.02 }}
+        className="absolute bottom-10 left-[10%] text-6xl z-20"
       >
         🦸‍♂️
       </motion.div>
@@ -83,21 +111,32 @@ const HeroJump = () => {
         </div>
       ))}
 
-      {gameState === 'START' && (
-        <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-6 text-center">
-          <h2 className="text-5xl mb-4">HERO JUMP</h2>
-          <p className="text-xl mb-6">Click to jump over the monsters!</p>
-          <div className="animate-bounce text-6xl">👆</div>
-        </div>
-      )}
+      <AnimatePresence>
+        {gameState === 'START' && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-6 text-center z-30"
+          >
+            <h2 className="text-5xl mb-4 text-white">HERO JUMP</h2>
+            <p className="text-xl mb-6 font-comic">Tap to jump over the monsters!</p>
+            <div className="animate-bounce text-6xl">👆</div>
+          </motion.div>
+        )}
 
-      {gameState === 'OVER' && (
-        <div className="absolute inset-0 bg-cartoon-red/90 flex flex-col items-center justify-center text-white p-6 text-center">
-          <h2 className="text-6xl mb-2">WHAM!</h2>
-          <p className="text-2xl mb-6">Final Score: {score}</p>
-          <button className="btn-cartoon bg-white text-black">TRY AGAIN</button>
-        </div>
-      )}
+        {gameState === 'OVER' && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="absolute inset-0 bg-cartoon-red/90 flex flex-col items-center justify-center text-white p-6 text-center z-30"
+          >
+            <h2 className="text-6xl mb-2 text-white">WHAM!</h2>
+            <p className="text-2xl mb-6 font-comic">Final Score: {score}</p>
+            <button className="btn-cartoon bg-white text-black hover:scale-110 transition-transform">TRY AGAIN</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

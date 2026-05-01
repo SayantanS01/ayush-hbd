@@ -55,7 +55,7 @@ const MemoryMatch = () => {
         <p className="font-comic">Find all pairs to win!</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-4 max-w-md w-full">
+      <div className="grid grid-cols-4 gap-4 max-w-md w-full perspective-1000">
         {cards.map((card, idx) => (
           <motion.div
             key={card.id}
@@ -66,14 +66,19 @@ const MemoryMatch = () => {
             }`}
             onClick={() => handleFlip(idx)}
           >
-            <div className={`absolute inset-0 backface-hidden card-cartoon flex items-center justify-center text-4xl bg-white ${
-              flipped.includes(idx) || solved.includes(idx) ? 'hidden' : 'block'
-            }`}>
+            {/* Front Face */}
+            <div 
+              className="absolute inset-0 backface-hidden card-cartoon flex items-center justify-center text-4xl bg-white shadow-cartoon"
+              style={{ transform: 'translateZ(1px)' }}
+            >
               ❓
             </div>
-            <div className={`absolute inset-0 backface-hidden card-cartoon flex items-center justify-center text-5xl bg-cartoon-yellow rotate-y-180 ${
-              flipped.includes(idx) || solved.includes(idx) ? 'block' : 'hidden'
-            }`}>
+            
+            {/* Back Face */}
+            <div 
+              className="absolute inset-0 backface-hidden card-cartoon flex items-center justify-center text-5xl bg-cartoon-yellow rotate-y-180 shadow-cartoon"
+              style={{ transform: 'rotateY(180deg) translateZ(1px)' }}
+            >
               {card.emoji}
             </div>
           </motion.div>
