@@ -70,7 +70,7 @@ const MemoryMatch = () => {
                 {/* Front Face */}
                 <div 
                   className="absolute inset-0 backface-hidden card-cartoon bg-white flex items-center justify-center text-4xl shadow-cartoon border-[4px] border-black rounded-2xl"
-                  style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', zIndex: 2 }}
+                  style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', zIndex: isFlipped ? 1 : 2 }}
                 >
                   ❓
                 </div>
@@ -82,7 +82,7 @@ const MemoryMatch = () => {
                     backfaceVisibility: 'hidden', 
                     WebkitBackfaceVisibility: 'hidden',
                     transform: 'rotateY(180deg)',
-                    zIndex: 1
+                    zIndex: isFlipped ? 2 : 1
                   }}
                 >
                   {card.emoji}
