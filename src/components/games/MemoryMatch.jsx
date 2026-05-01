@@ -59,34 +59,36 @@ const MemoryMatch = () => {
         {cards.map((card, idx) => {
           const isFlipped = flipped.includes(idx) || solved.includes(idx);
           return (
-            <motion.div
-              key={card.id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="aspect-square cursor-pointer relative preserve-3d transition-all duration-500"
-              style={{ transformStyle: 'preserve-3d', transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
-              onClick={() => handleFlip(idx)}
-            >
-              {/* Front Face (Question Mark) */}
-              <div 
-                className="absolute inset-0 backface-hidden card-cartoon flex items-center justify-center text-4xl bg-white shadow-cartoon"
-                style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+            <div key={card.id} className="aspect-square perspective-1000">
+              <motion.div
+                animate={{ rotateY: isFlipped ? 180 : 0 }}
+                transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+                style={{ transformStyle: 'preserve-3d' }}
+                className="relative w-full h-full cursor-pointer"
+                onClick={() => handleFlip(idx)}
               >
-                ❓
-              </div>
-              
-              {/* Back Face (Emoji) */}
-              <div 
-                className="absolute inset-0 backface-hidden card-cartoon flex items-center justify-center text-5xl bg-cartoon-yellow shadow-cartoon"
-                style={{ 
-                  backfaceVisibility: 'hidden', 
-                  WebkitBackfaceVisibility: 'hidden',
-                  transform: 'rotateY(180deg)'
-                }}
-              >
-                {card.emoji}
-              </div>
-            </motion.div>
+                {/* Front Face */}
+                <div 
+                  className="absolute inset-0 backface-hidden card-cartoon bg-white flex items-center justify-center text-4xl shadow-cartoon border-[4px] border-black rounded-2xl"
+                  style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', zIndex: 2 }}
+                >
+                  ❓
+                </div>
+                
+                {/* Back Face */}
+                <div 
+                  className="absolute inset-0 backface-hidden flex items-center justify-center text-5xl bg-cartoon-yellow shadow-cartoon border-[4px] border-black rounded-2xl"
+                  style={{ 
+                    backfaceVisibility: 'hidden', 
+                    WebkitBackfaceVisibility: 'hidden',
+                    transform: 'rotateY(180deg)',
+                    zIndex: 1
+                  }}
+                >
+                  {card.emoji}
+                </div>
+              </motion.div>
+            </div>
           );
         })}
       </div>
